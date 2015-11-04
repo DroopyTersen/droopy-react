@@ -1,0 +1,31 @@
+{
+  "name": "droopy-react",
+  "version": "1.0.0",
+  "description": "",
+  "main": "scripts/app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/droopytersen/droopy-react"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/droopytersen/droopy-react/issues"
+  },
+  "homepage": "https://github.com/droopytersen/droopy-react",
+  "devDependencies": {
+    "css-loader": "0.18.0",
+    "jsx-loader": "^0.13.2",
+    "style-loader": "^0.13.0",
+    "webpack": "^1.12.2",
+    "webpack-dev-server": "^1.12.1"
+  },
+  "dependencies": {
+    "flux": "^2.1.1",
+    "react": "^0.14.2",
+    "react-dom": "^0.14.2"
+  }
+}
