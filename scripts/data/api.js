@@ -2,11 +2,11 @@
 var Q = require("q");
 var Api = function(url) {
 	this.url = url || "";
-};
+}; 
 
 Api.prototype.getItems = function() {
-	return fakeAsync([{title:"myTitle1ab"}, {title:"myTitle2"}]);
-};
+	return fakeAsync([{title:"myTitle1"}, {title:"myTitle2"}]);
+}; 
 
 var fakeAsync = function(data) {
 	// fake async with mock data
