@@ -13,7 +13,7 @@ var Item = React.createClass({
 					<h3>{this.props.item.title}</h3>
 				</a>
 			</li>
-		)
+		) 
 	}
 });
 

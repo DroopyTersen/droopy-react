@@ -59,7 +59,7 @@
 		}
 	});
 
-	var ReactDOM = __webpack_require__(178);
+	var ReactDOM = __webpack_require__(179);
 	ReactDOM.render(React.createElement(App, null), document.getElementById("app"));
 
 /***/ },
@@ -19993,7 +19993,7 @@
 
 	var storify = __webpack_require__(163);
 	var itemStore = __webpack_require__(164);
-	var ItemList = __webpack_require__(176);
+	var ItemList = __webpack_require__(177);
 
 	var ItemListWithStore = storify(ItemList, [itemStore], function() {
 		return { items: itemStore.getItems() };
@@ -20036,10 +20036,9 @@
 /* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var uiActions = __webpack_require__(165);
-	var apiActions = __webpack_require__(170);
-	var Api = __webpack_require__(171);
-	var storeUtils = __webpack_require__(174);
+	var actions = __webpack_require__(165);
+	var Api = __webpack_require__(172);
+	var storeUtils = __webpack_require__(175);
 
 	var api = new Api();
 	var _items = [];
@@ -20052,29 +20051,38 @@
 
 	var actionHandlers = {};
 
-	actionHandlers[apiActions.types.LOAD_ITEMS] =  function(action) {
-		api.getItems().then(apiActions.itemsLoaded);
+	actionHandlers[actions.api.types.LOAD_ITEMS] =  function(action) {
+		api.getItems().then(actions.api.itemsLoaded);
 	};
 
-	actionHandlers[apiActions.types.ITEMS_LOADED] = function(action) {
+	actionHandlers[actions.api.types.ITEMS_LOADED] = function(action) {
 		_items = action.items;
 		store.broadcast();	
 	};
 
-	actionHandlers[uiActions.types.SELECT_ITEM] = function(action) {
+	actionHandlers[actions.ui.types.SELECT_ITEM] = function(action) {
 		alert("An item was selected: " + action.item.title);
 	};
 
 	storeUtils.register(actionHandlers);
 
-	apiActions.loadItems();
+	actions.api.loadItems();
 	module.exports = store;
 
 /***/ },
 /* 165 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var dispatcher = __webpack_require__(166);
+	module.exports = {
+		ui: __webpack_require__(166),
+		api: __webpack_require__(171)
+	};
+
+/***/ },
+/* 166 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var dispatcher = __webpack_require__(167);
 
 	// Define action type keys
 	var actions = {
@@ -20093,15 +20101,15 @@
 	module.exports = actions;
 
 /***/ },
-/* 166 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// Create singleton using facebooks dispatcher implementation
-	var Dispatcher = __webpack_require__(167).Dispatcher;
+	var Dispatcher = __webpack_require__(168).Dispatcher;
 	module.exports = new Dispatcher();
 
 /***/ },
-/* 167 */
+/* 168 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -20113,11 +20121,11 @@
 	 * of patent rights can be found in the PATENTS file in the same directory.
 	 */
 
-	module.exports.Dispatcher = __webpack_require__(168);
+	module.exports.Dispatcher = __webpack_require__(169);
 
 
 /***/ },
-/* 168 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -20139,7 +20147,7 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var invariant = __webpack_require__(169);
+	var invariant = __webpack_require__(170);
 
 	var _prefix = 'ID_';
 
@@ -20354,7 +20362,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)))
 
 /***/ },
-/* 169 */
+/* 170 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -20409,10 +20417,10 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8)))
 
 /***/ },
-/* 170 */
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var dispatcher = __webpack_require__(166);
+	var dispatcher = __webpack_require__(167);
 
 	// Define action type keys
 	var actions = {
@@ -20453,11 +20461,11 @@
 	module.exports = actions;
 
 /***/ },
-/* 171 */
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
 	//ajax calls go here
-	var Q = __webpack_require__(172);
+	var Q = __webpack_require__(173);
 	var Api = function(url) {
 		this.url = url || "";
 	}; 
@@ -20481,7 +20489,7 @@
 	module.exports = Api;
 
 /***/ },
-/* 172 */
+/* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process, setImmediate) {// vim:ts=4:sts=4:sw=4:
@@ -22533,10 +22541,10 @@
 
 	});
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8), __webpack_require__(173).setImmediate))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8), __webpack_require__(174).setImmediate))
 
 /***/ },
-/* 173 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(setImmediate, clearImmediate) {var nextTick = __webpack_require__(8).nextTick;
@@ -22615,15 +22623,15 @@
 	exports.clearImmediate = typeof clearImmediate === "function" ? clearImmediate : function(id) {
 	  delete immediateIds[id];
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(173).setImmediate, __webpack_require__(173).clearImmediate))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(174).setImmediate, __webpack_require__(174).clearImmediate))
 
 /***/ },
-/* 174 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var EventEmitter = __webpack_require__(175).EventEmitter;
+	var EventEmitter = __webpack_require__(176).EventEmitter;
 	var CHANGE_EVENT = "change";
-	var dispatcher = __webpack_require__(166);
+	var dispatcher = __webpack_require__(167);
 
 	var storeUtils = {};
 
@@ -22658,7 +22666,7 @@
 
 
 /***/ },
-/* 175 */
+/* 176 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -22962,11 +22970,11 @@
 
 
 /***/ },
-/* 176 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(5);
-	var Item = __webpack_require__(177);
+	var Item = __webpack_require__(178);
 
 	var ItemList = React.createClass({displayName: "ItemList",
 		render: function() {
@@ -22984,11 +22992,11 @@
 	module.exports = ItemList;
 
 /***/ },
-/* 177 */
+/* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(5);
-	var uiActions = __webpack_require__(165);
+	var uiActions = __webpack_require__(166);
 
 	var Item = React.createClass({displayName: "Item",
 		handleClick: function(e) {
@@ -23002,14 +23010,14 @@
 						React.createElement("h3", null, this.props.item.title)
 					)
 				)
-			)
+			) 
 		}
 	});
 
 	module.exports = Item;
 
 /***/ },
-/* 178 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

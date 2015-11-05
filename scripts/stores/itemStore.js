@@ -1,5 +1,4 @@
-var uiActions = require("../actions/uiActions");
-var apiActions = require("../actions/apiActions");
+var actions = require("../actions");
 var Api = require("../data/api");
 var storeUtils = require("./storeUtils");
 
@@ -14,20 +13,20 @@ store.getItems = function() {
 
 var actionHandlers = {};
 
-actionHandlers[apiActions.types.LOAD_ITEMS] =  function(action) {
-	api.getItems().then(apiActions.itemsLoaded);
+actionHandlers[actions.api.types.LOAD_ITEMS] =  function(action) {
+	api.getItems().then(actions.api.itemsLoaded);
 };
 
-actionHandlers[apiActions.types.ITEMS_LOADED] = function(action) {
+actionHandlers[actions.api.types.ITEMS_LOADED] = function(action) {
 	_items = action.items;
 	store.broadcast();	
 };
 
-actionHandlers[uiActions.types.SELECT_ITEM] = function(action) {
+actionHandlers[actions.ui.types.SELECT_ITEM] = function(action) {
 	alert("An item was selected: " + action.item.title);
 };
 
 storeUtils.register(actionHandlers);
 
-apiActions.loadItems();
+actions.api.loadItems();
 module.exports = store;
