@@ -1,10 +1,10 @@
 var React = require("react");
-var uiActions = require("../actions/uiActions");
+var actions = require("../actions");
 
 var Item = React.createClass({
 	handleClick: function(e) {
 		e.preventDefault();
-		uiActions.selectItem(this.props.item);
+		actions.ui.selectItem(this.props.item);
 	},
 	render: function() {
 		return (

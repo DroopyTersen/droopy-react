@@ -23,4 +23,4 @@ var storify = function(Component, stores, getStateFromStores) {
 	return StoreConnectedComponent;
 };
 
-module.exports = storify;
+module.exports = {storify};

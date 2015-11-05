@@ -44,23 +44,19 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
 	__webpack_require__(1);
-
 	var React = __webpack_require__(5);
 	var ItemListWithStore = __webpack_require__(162);
-
-	var App = React.createClass({displayName: "App",
-		render: function() {
-			return (
-				React.createElement("div", {className: "list-container"}, 
-					React.createElement(ItemListWithStore, null)
-				)
-			)
-		}
+	var App = React.createClass({
+	  displayName: "App",
+	  render: function() {
+	    return (React.createElement("div", {className: "list-container"}, React.createElement(ItemListWithStore, null)));
+	  }
 	});
-
-	var ReactDOM = __webpack_require__(179);
+	var ReactDOM = __webpack_require__(178);
 	ReactDOM.render(React.createElement(App, null), document.getElementById("app"));
+
 
 /***/ },
 /* 1 */
@@ -97,7 +93,7 @@
 
 
 	// module
-	exports.push([module.id, "body {\r\n\tbackground: #333;\r\n\tcolor:#fff;\r\n}\r\n.items li a {\r\n\tcolor: #fff;\r\n}", ""]);
+	exports.push([module.id, "body {\n\tbackground: #333;\n\tcolor:#fff;\n}\n.items li a {\n\tcolor: #fff;\n}", ""]);
 
 	// exports
 
@@ -19991,122 +19987,132 @@
 /* 162 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var storify = __webpack_require__(163);
+	"use strict";
+	var utils = __webpack_require__(163);
 	var itemStore = __webpack_require__(164);
-	var ItemList = __webpack_require__(177);
-
-	var ItemListWithStore = storify(ItemList, [itemStore], function() {
-		return { items: itemStore.getItems() };
+	var ItemList = __webpack_require__(176);
+	var ItemListWithStore = utils.storify(ItemList, [itemStore], function() {
+	  return {items: itemStore.getItems()};
 	});
-
 	module.exports = ItemListWithStore;
+
 
 /***/ },
 /* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
 	var React = __webpack_require__(5);
-
 	var storify = function(Component, stores, getStateFromStores) {
-		console.log(stores);
-		var StoreConnectedComponent = React.createClass({displayName: "StoreConnectedComponent",
-			getInitialState: function() {
-				return getStateFromStores(this.props);
-			},
-			componentDidMount: function() {
-				stores.forEach(store => store.subscribe(this.handleStoreChange) );
-			}, 
-			componentWillUnmount: function() {
-				stores.forEach(store => store.unsubscribe(this.handleStoreChange) );
-			},
-			handleStoreChange: function() {
-				this.setState(getStateFromStores(this.props));
-			},
-			render: function() {
-				return React.createElement(Component, React.__spread({},  this.props,  this.state))
-			}
-		});
-		
-		return StoreConnectedComponent;
+	  console.log(stores);
+	  var StoreConnectedComponent = React.createClass({
+	    displayName: "StoreConnectedComponent",
+	    getInitialState: function() {
+	      return getStateFromStores(this.props);
+	    },
+	    componentDidMount: function() {
+	      var $__0 = this;
+	      stores.forEach((function(store) {
+	        return store.subscribe($__0.handleStoreChange);
+	      }));
+	    },
+	    componentWillUnmount: function() {
+	      var $__0 = this;
+	      stores.forEach((function(store) {
+	        return store.unsubscribe($__0.handleStoreChange);
+	      }));
+	    },
+	    handleStoreChange: function() {
+	      this.setState(getStateFromStores(this.props));
+	    },
+	    render: function() {
+	      return React.createElement(Component, React.__spread({}, this.props, this.state));
+	    }
+	  });
+	  return StoreConnectedComponent;
 	};
+	module.exports = {storify: storify};
 
-	module.exports = storify;
 
 /***/ },
 /* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
 	var actions = __webpack_require__(165);
-	var Api = __webpack_require__(172);
-	var storeUtils = __webpack_require__(175);
-
+	var Api = __webpack_require__(171);
+	var storeUtils = __webpack_require__(174);
 	var api = new Api();
 	var _items = [];
-
 	var store = storeUtils.createStore();
-
 	store.getItems = function() {
-		return _items;
+	  return _items;
 	};
-
 	var actionHandlers = {};
-
-	actionHandlers[actions.api.types.LOAD_ITEMS] =  function(action) {
-		api.getItems().then(actions.api.itemsLoaded);
+	actionHandlers[actions.api.loadItems.type] = function() {
+	  api.getItems().then(actions.api.itemsLoaded);
 	};
-
-	actionHandlers[actions.api.types.ITEMS_LOADED] = function(action) {
-		_items = action.items;
-		store.broadcast();	
+	actionHandlers[actions.api.itemsLoaded.type] = function(items) {
+	  _items = items;
+	  store.broadcast();
 	};
-
-	actionHandlers[actions.ui.types.SELECT_ITEM] = function(action) {
-		alert("An item was selected: " + action.item.title);
+	actionHandlers[actions.ui.selectItem.type] = function(item) {
+	  alert("An item was selected: " + item.title);
 	};
-
 	storeUtils.register(actionHandlers);
-
 	actions.api.loadItems();
 	module.exports = store;
+
 
 /***/ },
 /* 165 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = {
-		ui: __webpack_require__(166),
-		api: __webpack_require__(171)
+	"use strict";
+	var actionUtils = __webpack_require__(166);
+	var createAction = actionUtils.createAction;
+	var actions = {
+	  api: {
+	    loadItems: createAction("load-items"),
+	    itemsLoaded: createAction("items-loaded"),
+	    ajaxFailed: createAction("ajax-failed")
+	  },
+	  ui: {selectItem: createAction("select-item")}
 	};
+	module.exports = actions;
+
 
 /***/ },
 /* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
 	var dispatcher = __webpack_require__(167);
+	var createAction = (function(type) {
+	  var actionFunc = function() {
+	    for (var payload = [],
+	        $__0 = 0; $__0 < arguments.length; $__0++)
+	      payload[$__0] = arguments[$__0];
+	    console.log(type);
+	    dispatcher.dispatch({
+	      type: type,
+	      payload: payload
+	    });
+	  };
+	  actionFunc.type = type;
+	  return actionFunc;
+	});
+	module.exports = {createAction: createAction};
 
-	// Define action type keys
-	var actions = {
-		types: {
-			SELECT_ITEM: "select-item",
-		}
-	};
-
-	actions.selectItem = function(item) {
-		dispatcher.dispatch({
-			type: actions.types.SELECT_ITEM,
-			item: item
-		});
-	};
-
-	module.exports = actions;
 
 /***/ },
 /* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// Create singleton using facebooks dispatcher implementation
+	"use strict";
 	var Dispatcher = __webpack_require__(168).Dispatcher;
 	module.exports = new Dispatcher();
+
 
 /***/ },
 /* 168 */
@@ -20420,76 +20426,28 @@
 /* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var dispatcher = __webpack_require__(167);
-
-	// Define action type keys
-	var actions = {
-		types: {
-			LOAD_ITEMS: "load-items",
-			ITEMS_LOADED: "items-loaded",
-			AJAX_FAILED: "ajax-failed"
-		}
+	"use strict";
+	var Q = __webpack_require__(172);
+	var Api = function(url) {
+	  this.url = url || "";
 	};
-
-	actions.loadItems = function() {
-		dispatcher.dispatch({
-			type: actions.types.LOAD_ITEMS,
-		});
+	Api.prototype.getItems = function() {
+	  return fakeAsync([{title: "myTitle1"}, {title: "myTitle2"}]);
 	};
-
-	actions.itemsLoaded = function(items) {
-		console.log("HERE 3");
-		dispatcher.dispatch({
-			type: actions.types.ITEMS_LOADED,
-			items: items
-		});
+	var fakeAsync = function(data) {
+	  var deferred = Q.defer();
+	  console.log("HERE2");
+	  setTimeout(function() {
+	    console.log("HERE2.1");
+	    deferred.resolve(data);
+	  }, 1);
+	  return deferred.promise;
 	};
+	module.exports = Api;
 
-	actions.ajaxFailed = function(xhr, textStatus, error) {
-		var details = "";
-		if (xhr.responseText && xhr.responseJSON.error) {
-			details = JSON.stringify(xhr.responseJSON.error);
-		}
-		dispatcher.dispatch({
-			type: actions.types.AJAX_FAILED,
-			error: error,
-			code: xhr.status,
-			details: details
-		});
-	};
-
-	module.exports = actions;
 
 /***/ },
 /* 172 */
-/***/ function(module, exports, __webpack_require__) {
-
-	//ajax calls go here
-	var Q = __webpack_require__(173);
-	var Api = function(url) {
-		this.url = url || "";
-	}; 
-
-	Api.prototype.getItems = function() {
-		return fakeAsync([{title:"myTitle1"}, {title:"myTitle2"}]);
-	}; 
-
-	var fakeAsync = function(data) {
-		// fake async with mock data
-		var deferred = Q.defer();
-		console.log("HERE2");
-
-		setTimeout(function() {
-		console.log("HERE2.1");
-			deferred.resolve(data);
-		},1);
-		return deferred.promise;
-	}; 
-
-	module.exports = Api;
-
-/***/ },
-/* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process, setImmediate) {// vim:ts=4:sts=4:sw=4:
@@ -22541,10 +22499,10 @@
 
 	});
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8), __webpack_require__(174).setImmediate))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(8), __webpack_require__(173).setImmediate))
 
 /***/ },
-/* 174 */
+/* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(setImmediate, clearImmediate) {var nextTick = __webpack_require__(8).nextTick;
@@ -22623,50 +22581,44 @@
 	exports.clearImmediate = typeof clearImmediate === "function" ? clearImmediate : function(id) {
 	  delete immediateIds[id];
 	};
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(174).setImmediate, __webpack_require__(174).clearImmediate))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(173).setImmediate, __webpack_require__(173).clearImmediate))
 
 /***/ },
-/* 175 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var EventEmitter = __webpack_require__(176).EventEmitter;
+	"use strict";
+	var EventEmitter = __webpack_require__(175).EventEmitter;
 	var CHANGE_EVENT = "change";
 	var dispatcher = __webpack_require__(167);
-
 	var storeUtils = {};
-
 	storeUtils.createStore = function() {
-		var store = new EventEmitter();
-		store.subscribe = function(cb) {
-			store.on(CHANGE_EVENT, cb);
-		};
-		store.unsubscribe = function(cb) {
-			store.removeListener(CHANGE_EVENT, cb);
-		};
-		store.broadcast = function() {
-			store.emit(CHANGE_EVENT);
-		}
-		return store;
+	  var store = new EventEmitter();
+	  store.subscribe = function(cb) {
+	    store.on(CHANGE_EVENT, cb);
+	  };
+	  store.unsubscribe = function(cb) {
+	    store.removeListener(CHANGE_EVENT, cb);
+	  };
+	  store.broadcast = function() {
+	    store.emit(CHANGE_EVENT);
+	  };
+	  return store;
 	};
-
-	storeUtils.checkAction = function(action) {
-		
-	};
-
 	storeUtils.register = function(actionHandlers) {
-		return dispatcher.register(function(action) {
-			if (actionHandlers[action.type]) {
-				actionHandlers[action.type](action);
-			}
-		});
+	  return dispatcher.register(function(action) {
+	    console.log("HERE I AM" + action.type);
+	    console.log(actionHandlers);
+	    if (actionHandlers[action.type]) {
+	      actionHandlers[action.type].apply(null, action.payload);
+	    }
+	  });
 	};
-
 	module.exports = storeUtils;
 
 
-
 /***/ },
-/* 176 */
+/* 175 */
 /***/ function(module, exports) {
 
 	// Copyright Joyent, Inc. and other Node contributors.
@@ -22970,54 +22922,49 @@
 
 
 /***/ },
+/* 176 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	var React = __webpack_require__(5);
+	var Item = __webpack_require__(177);
+	var ItemList = React.createClass({
+	  displayName: "ItemList",
+	  render: function() {
+	    var itemElements = this.props.items.map(function(item) {
+	      return React.createElement(Item, {item: item});
+	    });
+	    return (React.createElement("ul", {className: "items"}, itemElements));
+	  }
+	});
+	module.exports = ItemList;
+
+
+/***/ },
 /* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
 	var React = __webpack_require__(5);
-	var Item = __webpack_require__(178);
-
-	var ItemList = React.createClass({displayName: "ItemList",
-		render: function() {
-			var itemElements = this.props.items.map(function(item) {
-				return React.createElement(Item, {item: item})
-			});
-			return (
-				React.createElement("ul", {className: "items"}, 
-					itemElements
-				)
-			);
-		}
+	var actions = __webpack_require__(165);
+	var Item = React.createClass({
+	  displayName: "Item",
+	  handleClick: function(e) {
+	    e.preventDefault();
+	    actions.ui.selectItem(this.props.item);
+	  },
+	  render: function() {
+	    return (React.createElement("li", null, React.createElement("a", {
+	      href: "#",
+	      onClick: this.handleClick
+	    }, React.createElement("h3", null, this.props.item.title))));
+	  }
 	});
+	module.exports = Item;
 
-	module.exports = ItemList;
 
 /***/ },
 /* 178 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(5);
-	var uiActions = __webpack_require__(166);
-
-	var Item = React.createClass({displayName: "Item",
-		handleClick: function(e) {
-			e.preventDefault();
-			uiActions.selectItem(this.props.item);
-		},
-		render: function() {
-			return (
-				React.createElement("li", null, 
-					React.createElement("a", {href: "#", onClick: this.handleClick}, 
-						React.createElement("h3", null, this.props.item.title)
-					)
-				)
-			) 
-		}
-	});
-
-	module.exports = Item;
-
-/***/ },
-/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

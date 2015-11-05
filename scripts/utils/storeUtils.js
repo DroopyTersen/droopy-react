@@ -1,6 +1,6 @@
 var EventEmitter = require("events").EventEmitter;
 var CHANGE_EVENT = "change";
-var dispatcher = require("../dispatcher.js");
+var dispatcher = require("./dispatcher.js");
 
 var storeUtils = {};
 
@@ -18,14 +18,12 @@ storeUtils.createStore = function() {
 	return store;
 };
 
-storeUtils.checkAction = function(action) {
-	
-};
-
 storeUtils.register = function(actionHandlers) {
 	return dispatcher.register(function(action) {
+		console.log("HERE I AM" + action.type);
+		console.log(actionHandlers);
 		if (actionHandlers[action.type]) {
-			actionHandlers[action.type](action);
+			actionHandlers[action.type].apply(null, action.payload);
 		}
 	});
 };

@@ -1,7 +1,7 @@
 require("../styles/app.css");
 
 var React = require("react");
-var ItemListWithStore = require("./components/itemListStorified");
+var ItemListWithStore = require("./containers/connectedItemList");
 
 var App = React.createClass({
 	render: function() {
